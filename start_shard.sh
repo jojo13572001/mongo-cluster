@@ -3,14 +3,13 @@
 # Docker interface ip
 #DOCKERIP="172.31.5.27"
 
-if [ $# -ne 2 ]
+if [ $# -ne 7 ]
   then
-    echo "Arguments Number Wrong, it should be two: configServer num, masterIP"
+    echo "Arguments Number Wrong, it should be two: configServer num, mongo1r1Ip, mongo1r2Ip, mongo1r3Ip, mongo2r1Ip, mongo2r2Ip, mongo2r3Ip"
     exit
 fi
 
 DOCKERIP=$(/sbin/ifconfig docker0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
-MASTERIP=$2
 ETH0IP=$(/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
 LOCALPATH=$(pwd)
 ARGS="s --configdb "
@@ -27,36 +26,24 @@ docker rm -f $(sudo docker ps -a -f 'name=configserver' -q)
 #	docker rm ${c}
 #done
 
-callMongodAddress ()
-{
-	echo $(curl -sb -H "Accept: application/json" "http://$2:8500/v1/catalog/service/mongo") \
-       	| (jq -r ".[] | select(.ServiceID | contains(\"registrator:$1:27017\"))")
-}
-
 echo Start search shard master ip 
-MONGOD1R1=$(callMongodAddress mongod1r1 $2)
-MONGOD1R1IP=$(echo ${MONGOD1R1} | jq -r '.ServiceAddress')
-MONGOD1R1PORT=$(echo ${MONGOD1R1} | jq -r '.ServicePort')
+MONGOD1R1IP=$2
+MONGOD1R1PORT=$((1*10000+1))
 echo mongod1r1 ${MONGOD1R1IP}:${MONGOD1R1PORT}
-MONGOD1R2=$(callMongodAddress mongod1r2 $2)
-MONGOD1R2IP=$(echo ${MONGOD1R2} | jq -r '.ServiceAddress')
-MONGOD1R2PORT=$(echo ${MONGOD1R2} | jq -r '.ServicePort')
+MONGOD1R2IP=$3
+MONGOD1R2PORT=$((2*10000+1))
 echo mongod1r2 ${MONGOD1R2IP}:${MONGOD1R2PORT}
-MONGOD1R3=$(callMongodAddress mongod1r3 $2)
-MONGOD1R3IP=$(echo ${MONGOD1R3} | jq -r '.ServiceAddress')
-MONGOD1R3PORT=$(echo ${MONGOD1R3} | jq -r '.ServicePort')
+MONGOD1R3IP=$4
+MONGOD1R3PORT=$((3*10000+1))
 echo mongod1r3 ${MONGOD1R3IP}:${MONGOD1R3PORT}
-MONGOD2R1=$(callMongodAddress mongod2r1 $2)
-MONGOD2R1IP=$(echo ${MONGOD2R1} | jq -r '.ServiceAddress')
-MONGOD2R1PORT=$(echo ${MONGOD2R1} | jq -r '.ServicePort')
+MONGOD2R1IP=$5
+MONGOD2R1PORT=$((1*10000+2))
 echo mongod2r1 ${MONGOD2R1IP}:${MONGOD2R1PORT}
-MONGOD2R2=$(callMongodAddress mongod2r2 $2)
-MONGOD2R2IP=$(echo ${MONGOD2R1} | jq -r '.ServiceAddress')
-MONGOD2R2PORT=$(echo ${MONGOD2R2} | jq -r '.ServicePort')
+MONGOD2R2IP=$6
+MONGOD2R2PORT=$((2*10000+2))
 echo mongod2r2 ${MONGOD2R2IP}:${MONGOD2R2PORT}
-MONGOD2R3=$(callMongodAddress mongod2r3 $2)
-MONGOD2R3IP=$(echo ${MONGOD2R3} | jq -r '.ServiceAddress')
-MONGOD2R3PORT=$(echo ${MONGOD2R3} | jq -r '.ServicePort')
+MONGOD2R3IP=$7
+MONGOD2R3PORT=$((3*10000+2))
 echo mongod2r3 ${MONGOD2R3IP}:${MONGOD2R3PORT}
 
 echo "Waiting Generate js command for mongodb replication and sharding"
