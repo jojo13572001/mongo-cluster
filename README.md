@@ -4,7 +4,7 @@ modify from jacksoncage for my personal usage.
 
 #Diagram
 ![Mongo Cluster](https://github.com/jojo13572001/mongo-cluster/blob/master/images/mongo.png)
-#Usagehub
+#Usage (Not Yet Finish)
 Create Set1 mongod nodes
 
 1.1 Go to you mongod server 172.31.13.64
