@@ -3,7 +3,7 @@ A dockerized mongodb cluster with shard support.
 modify from jacksoncage for my personal usage.
 
 #Diagram
-
+![My image](jojo13572001.github.com/repository/images/mongo.jpg)
 #Usage
 Create Set1 mongod nodes
 
