@@ -3,8 +3,8 @@ A dockerized mongodb cluster with shard support.
 modify from jacksoncage for my personal usage.
 
 #Diagram
-![Mongo Cluster](jojo13572001/mongo-cluster/blob/master/images/mongo.png)
-#Usage
+![Mongo Cluster](jojo13572001.github.com/mongo-cluster/blob/master/images/mongo.png)
+#Usagehub
 Create Set1 mongod nodes
 
 1.1 Go to you mongod server 172.31.13.64
